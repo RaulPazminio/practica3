@@ -39,7 +39,7 @@ void tareaTres(void *arg){
     int i;
     for(i=0; i < ITER; i++){
         rt_sem_p(&semaforo);
-        global2 = global2*2;
+        global2 = global2+global;
         printf("Tarea 3 la variable global2 es %d -----\n", global2);
         rt_sem_v(&semaforo);
     }
@@ -49,7 +49,7 @@ void tareaCuarto(void *arg){
     int i;
     for(i=0; i < ITER; i++){
         rt_sem_p(&semaforo);
-        global2 = global2/2;
+        global2 = global2+global;
         printf("Tarea 4 la variable global2 es %d -----\n", global2);
         rt_sem_v(&semaforo);
     }
