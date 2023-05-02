@@ -10,9 +10,12 @@
 
 static RT_TASK tarea1;
 static RT_TASK tarea2;
+static RT_TASK tarea3;
+static RT_TASK tarea4;
 static RT_SEM semaforo;
 
 int global = 0;
+int global2 = 1;
 
 void tareaUno(void *arg){
     int i;
@@ -32,11 +35,35 @@ void tareaDos(void *arg){
     }
 }
 
+void tareaTres(void *arg){
+    int i;
+    for(i=0; i < ITER; i++){
+        rt_sem_p(&semaforo);
+        global2 = global2*2;
+        printf("Tarea 3 la variable global2 es %d -----\n", global2);
+        rt_sem_v(&semaforo);
+    }
+}
+
+void tareaCuarto(void *arg){
+    int i;
+    for(i=0; i < ITER; i++){
+        rt_sem_p(&semaforo);
+        global2 = global2/2;
+        printf("Tarea 4 la variable global2 es %d -----\n", global2);
+        rt_sem_v(&semaforo);
+    }
+}
+
 int main(int argc, char* argv[]){
     rt_sem_create(&semaforo, "semaforo", 1, S_PRIO);
     rt_task_create(&tarea1, "tarea 1", 0 , 1, 0);
     rt_task_create(&tarea2, "tarea 2", 0 , 1, 0);
+    rt_task_create(&tarea3, "tarea 3", 0 , 1, 0);
+    rt_task_create(&tarea4, "tarea 4", 0 , 1, 0);
     rt_task_start(&tarea1, &tareaUno,0);
     rt_task_start(&tarea2, &tareaDos,0);
+    rt_task_start(&tarea3, &tareaTres,0);
+    rt_task_start(&tarea4, &tareaCuarto,0);
     return 0;
 }
